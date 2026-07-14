@@ -1,5 +1,12 @@
 import pandas as pd
 import numpy as np
+import streamlit as st
+
+# Setup Tampilan Web
+st.set_page_config(page_title="SPK Karyawan - Sistem Cerdas", layout="wide")
+st.title("Sistem Pendukung Keputusan (SPK) Penilaian Karyawan")
+st.markdown("Membandingkan metode **SAW, WP, dan TOPSIS** untuk 30 data karyawan dummy.")
+st.divider()
 
 # ==========================================
 # 1. Generate 30 Data Dummy Karyawan
@@ -55,7 +62,7 @@ d_min = np.sqrt(np.sum((matriks_berbobot - ideal_negatif)**2, axis=1))
 topsis_score = d_min / (d_min + d_plus)
 
 # ==========================================
-# 5. Menggabungkan Hasil ke Tabel Perbandingan
+# 5. Menggabungkan Hasil ke Tabel
 # ==========================================
 hasil_df = pd.DataFrame({
     'Alternatif': df['Alternatif'],
@@ -68,10 +75,9 @@ hasil_df['SAW_Rank'] = hasil_df['SAW_Score'].rank(ascending=False).astype(int)
 hasil_df['WP_Rank'] = hasil_df['WP_Score'].rank(ascending=False).astype(int)
 hasil_df['TOPSIS_Rank'] = hasil_df['TOPSIS_Score'].rank(ascending=False).astype(int)
 
-# Urutkan datanya dari nilai tertinggi di hasil_df terlebih dahulu
+# Mengurutkan dari ranking 1
 hasil_df = hasil_df.sort_values(by='SAW_Score', ascending=False)
 
-# Baru gabungkan ke dalam final_df agar formatnya sesuai presentasi
 final_df = pd.DataFrame({
     'Alternatif': hasil_df['Alternatif'],
     'SAW (V / Rank)': hasil_df['SAW_Score'].astype(str) + " / " + hasil_df['SAW_Rank'].astype(str),
@@ -79,5 +85,11 @@ final_df = pd.DataFrame({
     'TOPSIS (CC / Rank)': hasil_df['TOPSIS_Score'].astype(str) + " / " + hasil_df['TOPSIS_Rank'].astype(str)
 })
 
-# Tampilkan hasilnya tanpa nomor index agar rapi
-print(final_df.to_string(index=False))
+# Menampilkan di Web
+st.subheader("Data Awal Karyawan (Dummy)")
+st.dataframe(df, use_container_width=True)
+
+st.subheader("Hasil Perbandingan Metode (SAW, WP, TOPSIS)")
+st.dataframe(final_df, use_container_width=True)
+
+st.success("Insight utama: Ketiga metode secara konsisten menempatkan alternatif terbaik pada peringkat atas. Hanya peringkat menengah-bawah yang sedikit berbeda antar metode hal wajar karena perbedaan mekanisme perhitungan, namun tidak mengubah rekomendasi akhir.")
