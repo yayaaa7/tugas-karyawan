@@ -5,14 +5,21 @@ import streamlit as st
 # Setup Tampilan Web
 st.set_page_config(page_title="SPK Karyawan - Sistem Cerdas", layout="wide")
 st.title("Sistem Pendukung Keputusan (SPK) Penilaian Karyawan")
-st.markdown("Membandingkan metode **SAW, WP, dan TOPSIS** untuk 30 data karyawan dummy.")
+st.markdown("Membandingkan metode **SAW, WP, dan TOPSIS** untuk 30 data karyawan.")
 st.divider()
 
 # ==========================================
 # 1. Generate 30 Data Dummy Karyawan
 # ==========================================
 np.random.seed(42) 
-nama_karyawan = [f"Karyawan_{i}" for i in range(1, 31)]
+
+# List 30 Nama Karyawan Dummy
+nama_karyawan = [
+    "Budi", "Citra", "Dedi", "Eka", "Fajar", "Gita", "Hadi", "Intan", "Joko", "Kartika",
+    "Lukman", "Maya", "Nanda", "Oka", "Putri", "Qori", "Rizky", "Sari", "Tono", "Utami",
+    "Vina", "Wawan", "Xaverius", "Yudi", "Zahra", "Agus", "Bambang", "Cahyo", "Dian", "Erwin"
+]
+
 data = {
     'Alternatif': nama_karyawan,
     'C1_Kinerja': np.random.randint(60, 100, 30),
@@ -92,4 +99,4 @@ st.dataframe(df, use_container_width=True)
 st.subheader("Hasil Perbandingan Metode (SAW, WP, TOPSIS)")
 st.dataframe(final_df, use_container_width=True)
 
-st.success("Insight utama: Ketiga metode secara konsisten menempatkan alternatif terbaik pada peringkat atas. Hanya peringkat menengah-bawah yang sedikit berbeda antar metode hal wajar karena perbedaan mekanisme perhitungan, namun tidak mengubah rekomendasi akhir.")
+st.success("Insight utama: Ketiga metode secara konsisten menempatkan alternatif terbaik pada peringkat atas. Hanya peringkat menengah-bawah yang sedikit berbeda antar metode, hal wajar karena perbedaan mekanisme perhitungan, namun tidak mengubah rekomendasi akhir.")
